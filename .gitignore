@@ -1,0 +1,12 @@
+prac*
+
+__pycache__/
+*.py[cod]
+*.ipynb_checkpoints
+
+ckpts/
+viz/
+wandb/
+data/
+
+test*
