@@ -11,6 +11,6 @@ class Collator:
             total_sent.append(s1)
             total_sent.append(s2)
         score = torch.tensor(score)
-        inputs = self.tknzr(total_sent, return_tensors='pt', padding=True)
+        inputs = self.tknzr.batch_encode_plus(total_sent, return_tensors='pt', padding=True, truncation=True)
 
         return inputs, score 

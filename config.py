@@ -1,10 +1,10 @@
 TKNZR_PATH = './tknzr/bert_tknzr'
 
 LOAD_CKPT = False 
-USE_WANDB = False 
+USE_WANDB = True 
 
-LR = 1e-5
+LR = 2e-5
 WD = 0
-BS = 1 
-EPOCHS = 5 
-PRINT_FREQ = 1 
+BS = 6 
+EPOCHS =  10 
+PRINT_FREQ = 50 

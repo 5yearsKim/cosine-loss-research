@@ -10,7 +10,7 @@ from models import SentenceRoberta, SentenceBert
 import wandb
 
 if USE_WANDB:
-    wandb.init(project="cosine-research", entity="akaai", name=f'bert-base bs={BS},lr={LR}')
+    wandb.init(project="cosine-research", entity="akaai", name=f'bert-base mse square bs={BS},lr={LR}')
     wandb.config = {
       "learning_rate": LR,
       "batch_size": BS,

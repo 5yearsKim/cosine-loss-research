@@ -32,9 +32,7 @@ class SimilarityCriterion:
         self.mse = nn.MSELoss()
 
     def __call__(self, logits, labels):
-        sim_score = self.get_sim_score(logits)
-        loss = self.mse(sim_score, labels)
-        return loss
+        return self.get_square_loss(logits, labels)
 
     def get_cosine_loss(self, logits, labels):
         bs, dim = logits.shape[0], logits.shape[-1]
@@ -43,9 +41,13 @@ class SimilarityCriterion:
         similarity = 0.5 * (similarity + 1) 
         loss = self.mse(similarity, labels)
         return loss 
+    
+    def get_normal_loss(self, logits, labels):
+        sim_score = self.get_sim_score(logits)
+        loss = self.mse(sim_score, labels)
+        return loss
 
-
-    def get_squre_loss(self, logits, labels):
+    def get_square_loss(self, logits, labels):
         sim_score = self.get_sim_score(logits)
         loss = self.mse(torch.square(sim_score), torch.square(labels))
         return loss

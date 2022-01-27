@@ -15,6 +15,8 @@ class Trainer:
         self.val_best = float('inf') 
         self.use_wandb = use_wandb
 
+        # self.validate(0)
+
     def train(self, epochs, print_freq=50):
         for epoch in range(epochs):
             print("\n")
@@ -44,7 +46,7 @@ class Trainer:
     def validate(self, epoch):
         loss_meter = AverageMeter()
         acc_meter = AverageMeter()
-        logit_holder = []
+        score_holder = []
         label_holder = []
         with torch.no_grad():
             for i, (inputs, y) in enumerate(self.val_loader):
@@ -52,21 +54,21 @@ class Trainer:
                 logits = self.model(inputs)
                 loss = self.criterion(logits, y)
                 loss_meter.update(loss.item())
+                
+                sim_score = self.criterion.get_sim_score(logits)
+                score_holder.append(sim_score.view(-1))
+                label_holder.append(y.view(-1))
 
-                logit_holder.append(logits)
-                label_holder.append(y)
+        sim_scores = torch.cat(score_holder, dim=0)
+        labels = torch.cat(label_holder, dim=0)
+        pr = pearson_r(sim_scores, labels)
 
-        logits = torch.cat(logit_holder)
-        labels = torch.cat(label_holder)
-        pr = pearson_r(logits, labels)
-        print(pr)
-
-        print(f'val loss: {loss_meter.avg}, val_acc: {acc_meter.avg}')
+        print(f'val loss: {loss_meter.avg}, val_acc: {pr.item()}')
         if self.use_wandb:
             wandb.log({
                 "train_loss": self.loss_meter.avg,
                 "val_loss": loss_meter.avg,
-                "val_acc": acc_meter.avg,
+                "p corr": pr.item(),
             })
 
         if loss_meter.avg < self.val_best:
