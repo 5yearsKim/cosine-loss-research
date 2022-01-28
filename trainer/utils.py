@@ -88,7 +88,7 @@ def pearson_r(x, y):
 def spearman_correlation(x: torch.Tensor, y: torch.Tensor):
     def _get_ranks(x: torch.Tensor) -> torch.Tensor:
         tmp = x.argsort()
-        ranks = torch.zeros_like(tmp)
+        ranks = torch.zeros_like(tmp, device=x.device)
         ranks[tmp] = torch.arange(len(x))
         return ranks
     """Compute correlation between 2 1-D vectors
