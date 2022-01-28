@@ -1,4 +1,5 @@
 
+# ['squre_arc', 'arc', 'normal']
 CRITERION_TYPE = 'square_arc'
 MODEL_TYPE = 'roberta'
 
@@ -13,6 +14,6 @@ USE_WANDB = True
 
 LR = 2e-5
 WD = 0
-BS = 12 
+BS = 22 
 EPOCHS =  10 
 PRINT_FREQ = 50 
