@@ -16,6 +16,8 @@ if USE_WANDB:
       "batch_size": BS,
     }
 
+model_type = 'roberta'
+
 
 train_from = ['./data/glue/STS-B/train.tsv']
 val_from = ['./data/glue/STS-B/dev.tsv']
@@ -23,14 +25,19 @@ val_from = ['./data/glue/STS-B/dev.tsv']
 train_set = SimilarityData(file_from=train_from)
 val_set = SimilarityData(file_from=val_from)
 
-# tknzr = RobertaTokenizer.from_pretrained(TKNZR_PATH)
-tknzr = BertTokenizer.from_pretrained(TKNZR_PATH)
+if MODEL_TYPE == 'roberta':
+    tknzr = RobertaTokenizer.from_pretrained(TKNZR_PATH)
+    model = SentenceRoberta()
+elif MODEL_TYPE == 'bert':
+    tknzr = BertTokenizer.from_pretrained(TKNZR_PATH)
+    model = SentenceBert()
+
+# tknzr = BertTokenizer.from_pretrained(TKNZR_PATH)
 collator = Collator(tknzr=tknzr)
 
 train_loader = DataLoader(train_set, batch_size=BS, collate_fn=collator)
 val_loader = DataLoader(val_set, batch_size=BS, collate_fn=collator)
 
-model = SentenceBert(pretrained_path='bert-base-uncased')
 optimizer = torch.optim.Adam(model.parameters(), lr=LR, weight_decay=WD)
 criterion = SimilarityCriterion()
 
