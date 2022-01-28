@@ -1,4 +1,4 @@
-from .utils import AverageMeter, pearson_r
+from .utils import AverageMeter, pearson_r, spearman_correlation
 import torch
 import wandb
 
@@ -62,13 +62,15 @@ class Trainer:
         sim_scores = torch.cat(score_holder, dim=0)
         labels = torch.cat(label_holder, dim=0)
         pr = pearson_r(sim_scores, labels)
+        spearman = spearman_correlation(sim_scores, labels)
 
-        print(f'val loss: {loss_meter.avg}, val_acc: {pr.item()}')
+        print(f'val loss: {loss_meter.avg}, pearson_r: {pr.item()}, spearman: {spearman}')
         if self.use_wandb:
             wandb.log({
                 "train_loss": self.loss_meter.avg,
                 "val_loss": loss_meter.avg,
                 "p corr": pr.item(),
+                "spearman": spearman.item(),
             })
 
         if loss_meter.avg < self.val_best:

@@ -83,3 +83,23 @@ def pearson_r(x, y):
     r_den = torch.norm(xm, 2) * torch.norm(ym, 2)
     r_val = r_num / r_den
     return r_val
+
+
+def spearman_correlation(x: torch.Tensor, y: torch.Tensor):
+    def _get_ranks(x: torch.Tensor) -> torch.Tensor:
+        tmp = x.argsort()
+        ranks = torch.zeros_like(tmp)
+        ranks[tmp] = torch.arange(len(x))
+        return ranks
+    """Compute correlation between 2 1-D vectors
+    Args:
+        x: Shape (N, )
+        y: Shape (N, )
+    """
+    x_rank = _get_ranks(x)
+    y_rank = _get_ranks(y)
+    
+    n = x.size(0)
+    upper = 6 * torch.sum((x_rank - y_rank).pow(2))
+    down = n * (n ** 2 - 1.0)
+    return 1.0 - (upper / down)
