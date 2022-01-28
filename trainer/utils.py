@@ -38,7 +38,7 @@ class SimilarityCriterion:
         elif self.ctype == 'square_arc':
             return self.get_square_arc_loss(logits, labels)
         elif self.ctype == 'normal':
-            return self.get_normal_loss(self, logits, labels)
+            return self.get_normal_loss(logits, labels)
         else:
             print(f'{self.ctype} not supported!')
 
