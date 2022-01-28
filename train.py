@@ -1,4 +1,4 @@
-from transformers import RobertaTokenizer, BertTokenizer
+from transformers import RobertaTokenizer, BertTokenizer, AdamW
 from config import *
 from trainer import Trainer
 from trainer.utils import SimilarityCriterion
@@ -38,7 +38,7 @@ collator = Collator(tknzr=tknzr)
 train_loader = DataLoader(train_set, batch_size=BS, collate_fn=collator)
 val_loader = DataLoader(val_set, batch_size=BS, collate_fn=collator)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=LR, weight_decay=WD)
+optimizer = AdamW(model.parameters(), lr=LR, weight_decay=WD)
 criterion = SimilarityCriterion(ctype=CRITERION_TYPE)
 
 trainer = Trainer(model, optimizer, criterion, train_loader, val_loader, use_wandb=USE_WANDB)
