@@ -1,4 +1,5 @@
 
+CRITERION_TYPE = 'square_arc'
 MODEL_TYPE = 'roberta'
 
 if MODEL_TYPE == 'roberta':

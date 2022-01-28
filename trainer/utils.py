@@ -27,14 +27,22 @@ def get_accuracy(y_true, y_prob, threshold=0.5):
 
 
 class SimilarityCriterion:
-    def __init__(self):
+    def __init__(self, ctype='normal'):
         self.cos_sim = nn.CosineSimilarity(dim=1, eps=1e-6)
         self.mse = nn.MSELoss()
+        self.ctype = ctype
 
     def __call__(self, logits, labels):
-        return self.get_square_loss(logits, labels)
+        if self.ctype == 'arc':
+            return self.get_arc_loss(logits, labels)
+        elif self.ctype == 'sqaure_arc':
+            return self.get_square_arc_loss(logits, labels)
+        elif self.ctype == 'normal':
+            return self.get_normal_loss(self, logits, labels)
+        else:
+            print(f'{self.ctype} not supported!')
 
-    def get_cosine_loss(self, logits, labels):
+    def get_normal_loss(self, logits, labels):
         bs, dim = logits.shape[0], logits.shape[-1]
         logits = torch.reshape(logits, (bs//2, 2, dim))
         similarity = self.cos_sim(logits[:, 0, :], logits[:, 1, :])
@@ -42,12 +50,12 @@ class SimilarityCriterion:
         loss = self.mse(similarity, labels)
         return loss 
     
-    def get_normal_loss(self, logits, labels):
+    def get_arc_loss(self, logits, labels):
         sim_score = self.get_sim_score(logits)
         loss = self.mse(sim_score, labels)
         return loss
 
-    def get_square_loss(self, logits, labels):
+    def get_square_arc_loss(self, logits, labels):
         sim_score = self.get_sim_score(logits)
         loss = self.mse(torch.square(sim_score), torch.square(labels))
         return loss

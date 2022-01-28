@@ -39,7 +39,7 @@ train_loader = DataLoader(train_set, batch_size=BS, collate_fn=collator)
 val_loader = DataLoader(val_set, batch_size=BS, collate_fn=collator)
 
 optimizer = torch.optim.Adam(model.parameters(), lr=LR, weight_decay=WD)
-criterion = SimilarityCriterion()
+criterion = SimilarityCriterion(ctype=CRITERION_TYPE)
 
 trainer = Trainer(model, optimizer, criterion, train_loader, val_loader, use_wandb=USE_WANDB)
 
