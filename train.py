@@ -38,7 +38,14 @@ collator = Collator(tknzr=tknzr)
 train_loader = DataLoader(train_set, batch_size=BS, collate_fn=collator)
 val_loader = DataLoader(val_set, batch_size=BS, collate_fn=collator)
 
-optimizer = AdamW(model.parameters(), lr=LR, weight_decay=WD)
+no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+named_param = model.named_parameters()
+optimizer_grouped_parameters = [
+    {'params': [p for n, p in named_param if not any(nd in n for nd in no_decay)], 'weight_decay': WD},
+    {'params': [p for n, p in named_param if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
+]
+
+optimizer = AdamW(optimizer_grouped_parameters, lr=LR)
 criterion = SimilarityCriterion(ctype=CRITERION_TYPE)
 
 trainer = Trainer(model, optimizer, criterion, train_loader, val_loader, use_wandb=USE_WANDB)

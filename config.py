@@ -13,7 +13,7 @@ LOAD_CKPT = False
 USE_WANDB = True 
 
 LR = 1e-5
-WD = 0
+WD = 0.01
 BS = 22
 EPOCHS =  10 
 PRINT_FREQ = 50 
