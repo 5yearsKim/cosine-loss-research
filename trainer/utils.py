@@ -35,7 +35,7 @@ class SimilarityCriterion:
     def __call__(self, logits, labels):
         if self.ctype == 'arc':
             return self.get_arc_loss(logits, labels)
-        elif self.ctype == 'sqaure_arc':
+        elif self.ctype == 'square_arc':
             return self.get_square_arc_loss(logits, labels)
         elif self.ctype == 'normal':
             return self.get_normal_loss(self, logits, labels)
