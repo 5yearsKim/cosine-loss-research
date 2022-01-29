@@ -10,7 +10,7 @@ elif MODEL_TYPE == 'bert':
 
 
 LOAD_CKPT = False 
-USE_WANDB = True 
+USE_WANDB = False 
 
 LR = 2e-5
 WD = 0.01
