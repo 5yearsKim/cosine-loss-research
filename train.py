@@ -33,7 +33,7 @@ elif MODEL_TYPE == 'bert':
 # tknzr = BertTokenizer.from_pretrained(TKNZR_PATH)
 collator = Collator(tknzr=tknzr)
 
-train_loader = DataLoader(train_set, batch_size=BS, collate_fn=collator)
+train_loader = DataLoader(train_set, batch_size=BS, collate_fn=collator, shuffle=True)
 val_loader = DataLoader(val_set, batch_size=BS, collate_fn=collator)
 
 no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
