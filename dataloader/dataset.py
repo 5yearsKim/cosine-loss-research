@@ -11,11 +11,10 @@ class SimilarityData(IterableDataset):
         for path in self.file_from:
             delimeter = '\t' if path.endswith('.tsv') else ','
             with open(path, 'r') as fr:
-                iter_csv = csv.reader(fr, delimiter=delimeter)
-                next(iter_csv)
+                iter_csv = csv.DictReader(fr, delimiter=delimeter, quoting=csv.QUOTE_NONE)
                 for row in iter_csv:
-                    sent1, sent2 = row[-3], row[-2]
-                    score = self._process_score(row[-1])
+                    sent1, sent2 = row['sentence1'], row['sentence2']
+                    score = self._process_score(row['score'])
                     if self.debug_print:
                         print(sent1,'|', sent2,'|', score)
                     yield sent1, sent2, score
