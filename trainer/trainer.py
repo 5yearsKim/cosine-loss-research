@@ -3,7 +3,8 @@ import torch
 import wandb
 
 class Trainer:
-    def __init__(self, model, optim, criterion, train_loader, val_loader, val_best_path='ckpts/best.pt', use_wandb=False):
+    def __init__(self, model, optim, criterion, train_loader, val_loader, val_best_path='ckpts/best.pt', \
+            use_wandb=False, scheduler=None):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.model = model.to(self.device)
         self.optim = optim
@@ -14,6 +15,7 @@ class Trainer:
         self.loss_meter = AverageMeter() 
         self.val_best = float('inf') 
         self.use_wandb = use_wandb
+        self.scheduler = None
 
         # self.validate(0)
 
@@ -40,6 +42,8 @@ class Trainer:
         loss.backward()
         torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.)
         self.optim.step()
+        if self.scheduler:
+            self.scheduler.step()
         self.loss_meter.update(loss.item())
 
         

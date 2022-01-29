@@ -1,4 +1,4 @@
-from transformers import RobertaTokenizer, BertTokenizer, AdamW
+from transformers import RobertaTokenizer, BertTokenizer, AdamW, get_linear_scheduler_with_warmup
 from config import *
 from trainer import Trainer
 from trainer.utils import SimilarityCriterion
@@ -45,10 +45,15 @@ optimizer_grouped_parameters = [
     {'params': [p for n, p in named_param if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
 ]
 
+train_steps = 5750
+warmup_steps = train_steps / 2
+num_training_steps = train_steps * 4  
+
 optimizer = AdamW(optimizer_grouped_parameters, lr=LR)
+scheduler = get_linear_scheduler_with_warmup(optimizer, warmup_steps, num_training_steps)
 criterion = SimilarityCriterion(ctype=CRITERION_TYPE)
 
-trainer = Trainer(model, optimizer, criterion, train_loader, val_loader, use_wandb=USE_WANDB)
+trainer = Trainer(model, optimizer, criterion, train_loader, val_loader, use_wandb=USE_WANDB, scheduler=scheduler)
 
 
 if LOAD_CKPT:

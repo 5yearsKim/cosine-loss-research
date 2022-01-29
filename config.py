@@ -12,8 +12,8 @@ elif MODEL_TYPE == 'bert':
 LOAD_CKPT = False 
 USE_WANDB = True 
 
-LR = 1e-5
-WD = 0.01
-BS = 22
+LR = 2e-5
+WD = 0
+BS = 2 
 EPOCHS =  10 
 PRINT_FREQ = 50 
