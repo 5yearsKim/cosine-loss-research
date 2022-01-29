@@ -1,7 +1,8 @@
-from transformers import RobertaTokenizer, BertTokenizer, AdamW, get_linear_schedule_with_warmup
+from transformers import RobertaTokenizer, BertTokenizer, AdamW 
 from config import *
 from trainer import Trainer
 from trainer.utils import SimilarityCriterion
+from trainer.scheduler import get_cosine_schedule_with_warmup
 from dataloader import SimilarityData, Collator
 from torch.utils.data import DataLoader
 import torch
@@ -50,11 +51,10 @@ warmup_steps = train_steps
 num_training_steps = train_steps * EPOCHS
 
 optimizer = AdamW(optimizer_grouped_parameters, lr=LR)
-scheduler = get_linear_schedule_with_warmup(optimizer, warmup_steps, num_training_steps)
+scheduler = get_cosine_schedule_with_warmup(optimizer, warmup_steps, num_training_steps)
 criterion = SimilarityCriterion(ctype=CRITERION_TYPE)
 
 trainer = Trainer(model, optimizer, criterion, train_loader, val_loader, use_wandb=USE_WANDB, scheduler=scheduler)
-
 
 if LOAD_CKPT:
     trainer.load('ckpts/best.pt')

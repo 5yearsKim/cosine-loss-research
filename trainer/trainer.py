@@ -15,7 +15,7 @@ class Trainer:
         self.loss_meter = AverageMeter() 
         self.val_best = float('inf') 
         self.use_wandb = use_wandb
-        self.scheduler = None
+        self.scheduler = scheduler 
 
         # self.validate(0)
 
