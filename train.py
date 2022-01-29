@@ -1,4 +1,4 @@
-from transformers import RobertaTokenizer, BertTokenizer, AdamW 
+from transformers import RobertaTokenizer, BertTokenizer
 from config import *
 from trainer import Trainer
 from trainer.utils import SimilarityCriterion
@@ -6,6 +6,7 @@ from trainer.scheduler import get_cosine_schedule_with_warmup
 from dataloader import SimilarityData, Collator
 from torch.utils.data import DataLoader
 import torch
+from torch.optim import AdamW
 from models import SentenceRoberta, SentenceBert
 
 import wandb
