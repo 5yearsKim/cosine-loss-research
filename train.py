@@ -5,7 +5,6 @@ from trainer.utils import SimilarityCriterion
 from trainer.scheduler import get_cosine_schedule_with_warmup
 from dataloader import SimilarityData, Collator
 from torch.utils.data import DataLoader
-import torch
 from torch.optim import AdamW
 from models import SentenceRoberta, SentenceBert
 
@@ -47,11 +46,12 @@ optimizer_grouped_parameters = [
     {'params': [p for n, p in named_param if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
 ]
 
-train_steps = 5750
+train_steps = 5750 // BS
 warmup_steps = train_steps 
 num_training_steps = train_steps * EPOCHS
 
 optimizer = AdamW(optimizer_grouped_parameters, lr=LR)
+
 scheduler = get_cosine_schedule_with_warmup(optimizer, warmup_steps, num_training_steps)
 criterion = SimilarityCriterion(ctype=CRITERION_TYPE)
 
