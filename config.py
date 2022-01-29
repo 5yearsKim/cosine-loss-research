@@ -12,7 +12,7 @@ elif MODEL_TYPE == 'bert':
 LOAD_CKPT = False 
 USE_WANDB = False 
 
-LR = 2e-5
+LR = 1e-5
 WD = 0.01
 BS = 22
 EPOCHS =  5

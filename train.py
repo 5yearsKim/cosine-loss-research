@@ -17,8 +17,8 @@ if USE_WANDB:
       "batch_size": BS,
     }
 
-train_from = ['./data/glue/STS-B/train.tsv']
-val_from = ['./data/glue/STS-B/dev.tsv']
+train_from = ['./data/glue/_STS-B/train.tsv']
+val_from = ['./data/glue/_STS-B/dev.tsv']
 
 train_set = SimilarityData(file_from=train_from)
 val_set = SimilarityData(file_from=val_from)
