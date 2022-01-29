@@ -14,6 +14,6 @@ USE_WANDB = True
 
 LR = 2e-5
 WD = 0
-BS = 2 
-EPOCHS =  10 
+BS = 22
+EPOCHS =  5 
 PRINT_FREQ = 50 

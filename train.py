@@ -46,8 +46,8 @@ optimizer_grouped_parameters = [
 ]
 
 train_steps = 5750
-warmup_steps = train_steps / 2
-num_training_steps = train_steps * 4  
+warmup_steps = train_steps 
+num_training_steps = train_steps * EPOCHS
 
 optimizer = AdamW(optimizer_grouped_parameters, lr=LR)
 scheduler = get_linear_schedule_with_warmup(optimizer, warmup_steps, num_training_steps)
