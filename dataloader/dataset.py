@@ -14,7 +14,7 @@ class SimilarityData(Dataset):
                 for row in iter_csv:
                     sent1, sent2 = row['sentence1'], row['sentence2']
                     score = self._process_score(row['score'])
-                    holder.append(sent1, sent2, score)
+                    holder.append([sent1, sent2, score])
         self.data = holder
 
     def __len__(self):
