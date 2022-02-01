@@ -3,6 +3,7 @@ import numpy as np
 from typing import List
 import torch.nn as nn
 from .utils import pearson_r, spearman_correlation 
+import torch
 
 class EmbeddingSimilarityEvaluator(SentenceEvaluator):
     def __init__(self, sentences1: List[str], sentences2: List[str], scores: List[float], batch_size: int = 16, main_similarity: SimilarityFunction = None, name: str = '', show_progress_bar: bool = False, write_csv: bool = True):
@@ -43,6 +44,10 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         embeddings1 = model.encode(self.sentences1, batch_size=self.batch_size, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
         embeddings2 = model.encode(self.sentences2, batch_size=self.batch_size, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
         labels = self.scores
+
+        embeddings1 = torch.tensor(embeddings1)
+        embeddings2 = torch.tensor(embeddings2)
+        labels = torch.tensor(labels)
 
         sim = self.cos_sim(embeddings1, embeddings2)
 
