@@ -59,7 +59,7 @@ class Trainer:
                 loss = self.criterion(logits, y)
                 loss_meter.update(loss.item())
                 
-                sim_score = self.criterion.get_sim_score(logits)
+                sim_score = self.criterion.get_target(logits)
                 score_holder.append(sim_score.view(-1))
                 label_holder.append(y.view(-1))
 

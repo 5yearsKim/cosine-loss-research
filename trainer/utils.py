@@ -43,10 +43,8 @@ class SimilarityCriterion:
             print(f'{self.ctype} not supported!')
 
     def get_normal_loss(self, logits, labels):
-        bs, dim = logits.shape[0], logits.shape[-1]
-        logits = torch.reshape(logits, (bs//2, 2, dim))
-        similarity = self.cos_sim(logits[:, 0, :], logits[:, 1, :])
-        similarity = 0.5 * (similarity + 1) 
+        similarity = self.get_cos_sim(logits)
+        similarity = 0.5 * (similarity + 1)
         loss = self.mse(similarity, labels)
         return loss 
     
@@ -60,11 +58,20 @@ class SimilarityCriterion:
         loss = self.mse(torch.square(sim_score), torch.square(labels))
         return loss
 
+    def get_target(self, logits):
+        if self.ctype == 'normal':
+            return 0.5 * (self.get_cos_sim(logits) + 1 )
+        else:
+            return self.get_sim_score(logits)
 
-    def get_sim_score(self, logits):
+    def get_cos_sim(self, logits):
         bs, dim = logits.shape[0], logits.shape[-1]
         logits = torch.reshape(logits, (bs//2, 2, dim))
         similarity = self.cos_sim(logits[:, 0, :], logits[:, 1, :])
+        return similarity
+
+    def get_sim_score(self, logits):
+        similarity = self.get_cos_sim(logits)
         sim_score = 1 - torch.acos(similarity) / math.pi
         return sim_score
 

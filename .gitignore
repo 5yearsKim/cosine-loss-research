@@ -11,3 +11,4 @@ wandb/
 data/
 
 test*
+stransformers/
