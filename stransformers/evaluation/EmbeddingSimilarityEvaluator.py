@@ -55,6 +55,8 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         spearman = spearman_correlation(sim, labels)
 
         print(pearson, spearman)
+
+        return spearman.item()
         
         # cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
         # manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)
