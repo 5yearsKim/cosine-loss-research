@@ -56,6 +56,8 @@ class ArcScoreCriterion(nn.Module):
             return x
         elif self.window_type == 'pow':
             return torch.pow(x, self.pow)
+        elif self.window_type == 'snake':
+            return -2 * torch.pow(x, 3) + 3 * torch.pow(x, 2)
         else:
             print(f'{self.window_type} not supported!')
 
