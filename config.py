@@ -1,6 +1,6 @@
 
-# ['squre_arc', 'arc', 'normal']
-CRITERION_TYPE = 'square_arc'
+# ['squre_arc', 'arc', 'cos_sim', 'cos_no_scale']
+CRITERION_TYPE = 'cos_no_scale'
 MODEL_TYPE = 'roberta'
 
 if MODEL_TYPE == 'roberta':

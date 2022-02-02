@@ -26,61 +26,6 @@ def get_accuracy(y_true, y_prob, threshold=0.5):
     return (y_true == y_prob).sum().item() / y_true.size(0)
 
 
-class SimilarityCriterion:
-    def __init__(self, ctype='normal'):
-        self.cos_sim = nn.CosineSimilarity(dim=1, eps=1e-6)
-        self.mse = nn.MSELoss()
-        self.ctype = ctype
-
-    def __call__(self, logits, labels):
-        if self.ctype == 'arc':
-            return self.get_arc_loss(logits, labels)
-        elif self.ctype == 'square_arc':
-            return self.get_square_arc_loss(logits, labels)
-        elif self.ctype == 'normal':
-            return self.get_normal_loss(logits, labels)
-        else:
-            print(f'{self.ctype} not supported!')
-
-    def get_normal_loss(self, logits, labels):
-        similarity = self.get_cos_sim(logits)
-        similarity = 0.5 * (similarity + 1)
-        loss = self.mse(similarity, labels)
-        return loss 
-    
-    def get_arc_loss(self, logits, labels):
-        sim_score = self.get_sim_score(logits)
-        loss = self.mse(sim_score, labels)
-        return loss
-
-    def get_square_arc_loss(self, logits, labels):
-        sim_score = self.get_sim_score(logits)
-        loss = self.mse(torch.square(sim_score), torch.square(labels))
-        return loss
-
-    def get_target(self, logits):
-        if self.ctype == 'normal':
-            return 0.5 * (self.get_cos_sim(logits) + 1 )
-        else:
-            return self.get_sim_score(logits)
-
-    def get_cos_sim(self, logits):
-        bs, dim = logits.shape[0], logits.shape[-1]
-        logits = torch.reshape(logits, (bs//2, 2, dim))
-        similarity = self.cos_sim(logits[:, 0, :], logits[:, 1, :])
-        return similarity
-
-    def get_sim_score(self, logits):
-        similarity = self.get_cos_sim(logits)
-        sim_score = 1 - torch.acos(similarity) / math.pi
-        return sim_score
-
-    def get_acc(self, logits, labels):
-        sim_score = self.get_sim_score(logits)
-        acc = get_accuracy(labels, sim_score, threshold=0.7)
-        return acc
-
-
 def pearson_r(x, y):
     mean_x = torch.mean(x)
     mean_y = torch.mean(y)

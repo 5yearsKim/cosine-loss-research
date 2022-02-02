@@ -1,8 +1,8 @@
 from transformers import RobertaTokenizer, BertTokenizer
 from config import *
 from trainer import Trainer
-from trainer.utils import SimilarityCriterion
-from trainer.scheduler import get_cosine_schedule_with_warmup, get_simple_decrease
+from trainer.criterion import CosineSimilarityCriterion, ArcScoreCriterion 
+from trainer.scheduler import get_simple_decrease
 from dataloader import SimilarityData, Collator
 from torch.utils.data import DataLoader
 from torch.optim import AdamW
@@ -50,7 +50,13 @@ num_training_steps = train_steps * EPOCHS
 optimizer = AdamW(optimizer_grouped_parameters, lr=LR)
 
 scheduler = get_simple_decrease(optimizer, warmup_steps, num_training_steps)
-criterion = SimilarityCriterion(ctype=CRITERION_TYPE)
+
+if CRITERION_TYPE in ['arc', 'square_arc']:
+    criterion = ArcScoreCriterion(ctype=CRITERION_TYPE)
+elif CRITERION_TYPE in ['cos_sim', 'cos_no_scale']:
+    criterion = CosineSimilarityCriterion(ctype=CRITERION_TYPE)
+else:
+    print(f'{CRITERION_TYPE} not supported')
 
 trainer = Trainer(model, optimizer, criterion, train_loader, val_loader, use_wandb=USE_WANDB, scheduler=scheduler)
 

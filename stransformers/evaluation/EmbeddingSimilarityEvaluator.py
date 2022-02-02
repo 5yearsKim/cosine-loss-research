@@ -45,8 +45,6 @@ class EmbeddingSimilarityEvaluator(SentenceEvaluator):
         embeddings2 = model.encode(self.sentences2, batch_size=self.batch_size, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
         labels = self.scores
 
-        embeddings1 = torch.tensor(embeddings1)
-        embeddings2 = torch.tensor(embeddings2)
         labels = torch.tensor(labels)
 
         sim = self.cos_sim(embeddings1, embeddings2)

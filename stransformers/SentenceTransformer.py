@@ -19,6 +19,7 @@ import queue
 from .evaluation import SentenceEvaluator
 from .util import import_from_string, batch_to_device
 from .models import Transformer, Pooling 
+from . import __version__
 
 logger = logging.getLogger(__name__)
 
@@ -79,25 +80,11 @@ class SentenceTransformer(nn.Sequential):
                batch_size: int = 32,
                show_progress_bar: bool = None,
                output_value: str = 'sentence_embedding',
-               convert_to_numpy: bool = True,
-               convert_to_tensor: bool = False,
+               convert_to_numpy: bool = False,
+               convert_to_tensor: bool = True,
                device: str = None,
                normalize_embeddings: bool = False) -> Union[List[Tensor], ndarray, Tensor]:
-        """
-        Computes sentence embeddings
 
-        :param sentences: the sentences to embed
-        :param batch_size: the batch size used for the computation
-        :param show_progress_bar: Output a progress bar when encode sentences
-        :param output_value:  Default sentence_embedding, to get sentence embeddings. Can be set to token_embeddings to get wordpiece token embeddings. Set to None, to get all output values
-        :param convert_to_numpy: If true, the output is a list of numpy vectors. Else, it is a list of pytorch tensors.
-        :param convert_to_tensor: If true, you get one large tensor as return. Overwrites any setting from convert_to_numpy
-        :param device: Which torch.device to use for the computation
-        :param normalize_embeddings: If set to true, returned vectors will have length 1. In that case, the faster dot-product (util.dot_score) instead of cosine similarity can be used.
-
-        :return:
-           By default, a list of tensors is returned. If convert_to_tensor, a stacked tensor is returned. If convert_to_numpy, a numpy matrix is returned.
-        """
         self.eval()
         if show_progress_bar is None:
             show_progress_bar = (logger.getEffectiveLevel()==logging.INFO or logger.getEffectiveLevel()==logging.DEBUG)
