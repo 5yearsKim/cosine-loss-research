@@ -4,6 +4,7 @@ import math
 
 class CosineSimilarityCriterion(nn.Module):
     def __init__(self, ctype='cos_sim'):
+        super().__init__()
         self.cos_sim = nn.CosineSimilarity(dim=1, eps=1e-6)
         self.mse = nn.MSELoss()
         self.ctype = ctype
@@ -26,6 +27,7 @@ class CosineSimilarityCriterion(nn.Module):
 
 class ArcScoreCriterion(nn.Module):
     def __init__(self, ctype='arc'):
+        super().__init__()
         self.cos_sim = nn.CosineSimilarity(dim=1, eps=1e-6)
         self.mse = nn.MSELoss()
         self.ctype = ctype

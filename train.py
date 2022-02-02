@@ -57,6 +57,7 @@ elif CRITERION_TYPE in ['cos_sim', 'cos_no_scale']:
     criterion = CosineSimilarityCriterion(ctype=CRITERION_TYPE)
 else:
     print(f'{CRITERION_TYPE} not supported')
+print(f'criterion type {CRITERION_TYPE} loaded')
 
 trainer = Trainer(model, optimizer, criterion, train_loader, val_loader, use_wandb=USE_WANDB, scheduler=scheduler)
 
