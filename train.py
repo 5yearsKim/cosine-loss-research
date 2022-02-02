@@ -53,8 +53,8 @@ scheduler = get_simple_decrease(optimizer, warmup_steps, num_training_steps)
 
 if CRITERION_TYPE in ['arc', 'square_arc']:
     criterion = ArcScoreCriterion(ctype=CRITERION_TYPE)
-elif CRITERION_TYPE in ['cos_sim', 'cos_no_scale']:
-    criterion = CosineSimilarityCriterion(ctype=CRITERION_TYPE)
+elif CRITERION_TYPE in ['cos_sim']:
+    criterion = CosineSimilarityCriterion(scale=[-1, 1])
 else:
     print(f'{CRITERION_TYPE} not supported')
 print(f'criterion type {CRITERION_TYPE} loaded')

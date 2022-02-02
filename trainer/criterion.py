@@ -3,21 +3,27 @@ import torch.nn as nn
 import math
 
 class CosineSimilarityCriterion(nn.Module):
-    def __init__(self, ctype='cos_sim'):
+    def __init__(self, scale=[-1, 1]):
         super().__init__()
         self.cos_sim = nn.CosineSimilarity(dim=1, eps=1e-6)
         self.mse = nn.MSELoss()
-        self.ctype = ctype
+        self.scale = scale
 
     def forward(self, logits, labels):
         return self.get_loss(logits, labels)
 
     def get_loss(self, logits, labels):
         similarity = self.get_target(logits)
-        if self.ctype != 'cos_no_scale':
-            similarity = 0.5 * (similarity + 1)
+        similarity = self.scaling(similarity)
         loss = self.mse(similarity, labels)
         return loss 
+
+    def scaling(self, x):
+        floor, ceil = self.scale[0], self.scale[1]
+        gap = ceil - floor
+        x = 0.5 * (x + 1)
+        x = gap * x + floor
+        return x
 
     def get_target(self, logits):
         bs, dim = logits.shape[0], logits.shape[-1]
