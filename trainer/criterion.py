@@ -32,11 +32,12 @@ class CosineSimilarityCriterion(nn.Module):
         return similarity
 
 class ArcScoreCriterion(nn.Module):
-    def __init__(self, ctype='arc'):
+    def __init__(self, ctype='arc', windowing='identity'):
         super().__init__()
         self.cos_sim = nn.CosineSimilarity(dim=1, eps=1e-6)
         self.mse = nn.MSELoss()
         self.ctype = ctype
+        self.windowing = windowing
     
     def forward(self, logits, labels):
         return self.get_loss(logits, labels)
@@ -49,9 +50,16 @@ class ArcScoreCriterion(nn.Module):
             loss = self.mse(sim_score, labels)
         return loss
 
+    def windowing(self, x):
+        if self.windowing == 'identity':
+            return x
+        elif self.windowing == 'square':
+            return torch.square(x)
+
     def get_target(self, logits):
         bs, dim = logits.shape[0], logits.shape[-1]
         logits = torch.reshape(logits, (bs//2, 2, dim))
         similarity = self.cos_sim(logits[:, 0, :], logits[:, 1, :])
         sim_score = 1 - torch.acos(similarity) / math.pi
-        return sim_score
+        target = self.windowing(sim_score) 
+        return target 
