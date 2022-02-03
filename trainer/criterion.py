@@ -60,6 +60,8 @@ class ArcScoreCriterion(nn.Module):
             return torch.cos(math.pi * (1 - x))
         elif self.window_type == 'linear':
             return 2 * x - 1
+        elif self.window_type == 'log':
+            return torch.log(2 * x) / torch.log(2)
         else:
             print(f'{self.window_type} not supported!')
 
