@@ -52,7 +52,7 @@ optimizer = AdamW(optimizer_grouped_parameters, lr=LR)
 scheduler = get_simple_decrease(optimizer, warmup_steps, num_training_steps)
 
 if CRITERION_TYPE in ['arc', 'square_arc']:
-    criterion = ArcScoreCriterion(ctype=CRITERION_TYPE, window_type='log')
+    criterion = ArcScoreCriterion(ctype=CRITERION_TYPE, window_type='original')
 elif CRITERION_TYPE in ['cos_sim']:
     criterion = CosineSimilarityCriterion(scale=[-1, 1])
 else:
