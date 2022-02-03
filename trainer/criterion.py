@@ -62,6 +62,8 @@ class ArcScoreCriterion(nn.Module):
             return 2 * x - 1
         elif self.window_type == 'log':
             return torch.log(2 * x) / math.log(2)
+        elif self.window_type == 'quadratic':
+            return -4 * torch.square(x - 1) + 1
         else:
             print(f'{self.window_type} not supported!')
 
