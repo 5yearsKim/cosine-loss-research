@@ -25,7 +25,7 @@ val_set = SimilarityData(file_from=val_from)
 
 if MODEL_TYPE == 'roberta':
     tknzr = RobertaTokenizer.from_pretrained(TKNZR_PATH)
-    model = SentenceRoberta()
+    model = SentenceRoberta(cls_type='fc')
 elif MODEL_TYPE == 'bert':
     tknzr = BertTokenizer.from_pretrained(TKNZR_PATH)
     model = SentenceBert()
@@ -52,7 +52,7 @@ optimizer = AdamW(optimizer_grouped_parameters, lr=LR)
 scheduler = get_simple_decrease(optimizer, warmup_steps, num_training_steps)
 
 if CRITERION_TYPE in ['arc', 'square_arc']:
-    criterion = ArcScoreCriterion(ctype=CRITERION_TYPE, window_type='quadratic')
+    criterion = ArcScoreCriterion(ctype=CRITERION_TYPE, window_type='log')
 elif CRITERION_TYPE in ['cos_sim']:
     criterion = CosineSimilarityCriterion(scale=[-1, 1])
 else:
